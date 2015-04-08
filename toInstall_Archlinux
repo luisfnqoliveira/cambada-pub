@@ -1,0 +1,5 @@
+
+echo "Warning: vtk installs vtk 6.10 -- not compatible with unchanged cambada code 1.0.0"
+sudo pacman -S cmake xsd xerces-c eigen vtk boost boost-libs libtool flex bison sdl freeglut
+
+yaourt -S ode-sp

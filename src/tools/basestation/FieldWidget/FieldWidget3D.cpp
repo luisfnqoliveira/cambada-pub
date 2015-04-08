@@ -250,7 +250,7 @@ FieldWidget3D::FieldWidget3D(QWidget *parent) :
     readerCbd->SetFileName("../config/3DModels/cambada_base.obj");
 
     vtkSmartPointer<vtkPolyDataMapper> actorMapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-    actorMapper->SetInput(readerCbd->GetOutput());
+	actorMapper->SetInputData(readerCbd->GetOutput());
 
     // WIPFIX renderer->Render();
 
@@ -290,7 +290,7 @@ FieldWidget3D::FieldWidget3D(QWidget *parent) :
         vtkVectorText* txt_robotNum = vtkVectorText::New();
         txt_robotNum->SetText(text);
         vtkPolyDataMapper *txtRobotMapper = vtkPolyDataMapper::New();
-        txtRobotMapper->SetInput(txt_robotNum->GetOutput());
+		txtRobotMapper->SetInputConnection(txt_robotNum->GetOutputPort());
         robotNum[i]->SetMapper(txtRobotMapper);
         robotNum[i]->SetScale(0.35);
         robotNum[i]->SetPosition(1000,1000,1000);
@@ -303,7 +303,7 @@ FieldWidget3D::FieldWidget3D(QWidget *parent) :
 
     velocityLineSrc = vtkLineSource::New();
     vtkSmartPointer<vtkPolyDataMapper> velLineMapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-    velLineMapper->SetInput(velocityLineSrc->GetOutput());
+	velLineMapper->SetInputConnection(velocityLineSrc->GetOutputPort());
     velocityLine = vtkActor::New();
     velocityLine->SetMapper(velLineMapper);
     velocityLine->GetProperty()->SetColor(1.0,0,0);
@@ -330,7 +330,7 @@ FieldWidget3D::FieldWidget3D(QWidget *parent) :
     if(scoreBoard->CanReadFile(filename.c_str()))
     {
         vtkSmartPointer<vtkImageMapper> imageMapper = vtkSmartPointer<vtkImageMapper>::New();
-        imageMapper->SetInput(scoreBoard->GetOutput());
+		imageMapper->SetInputConnection(scoreBoard->GetOutputPort());
         //imageMapper->SetInputConnection(colorImage->GetProducerPort());
         imageMapper->SetColorWindow(255);
         imageMapper->SetColorLevel(127.5);
@@ -920,7 +920,7 @@ void FieldWidget3D::drawGoals(vtkRenderer* renderer)
     reader->Update();
 
     vtkSmartPointer<vtkPolyDataMapper> goalMapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-    goalMapper->SetInput(reader->GetOutput());
+	goalMapper->SetInputConnection(reader->GetOutputPort());
 
     vtkSmartPointer<vtkActor> goalBlue = vtkSmartPointer<vtkActor>::New();
     goalBlue->SetMapper(goalMapper);
@@ -949,7 +949,7 @@ void FieldWidget3D::drawField(vtkRenderer* renderer)
     planeSrc->SetPoint1(+_FIELD_WIDTH + 2.0,0,0);
     planeSrc->SetPoint2(0,_FIELD_LENGTH + 2.0,0);
     vtkSmartPointer<vtkPolyDataMapper> planeMapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-    planeMapper->SetInput(planeSrc->GetOutput());
+	planeMapper->SetInputConnection(planeSrc->GetOutputPort());
     this->field = vtkActor::New();
     this->field->SetMapper(planeMapper);
     this->field->GetProperty()->SetColor(0.278,0.64,0.196);
@@ -1022,7 +1022,7 @@ void FieldWidget3D::createDot(vtkRenderer* renderer, float x, float y, bool blac
     dot->SetHeight(0.001);
     dot->SetResolution(32);
     vtkSmartPointer<vtkPolyDataMapper> dotMapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-    dotMapper->SetInput(dot->GetOutput());
+	dotMapper->SetInputConnection(dot->GetOutputPort());
 
     vtkSmartPointer<vtkActor> blackDot1 = vtkSmartPointer<vtkActor>::New();
     blackDot1->SetMapper(dotMapper);
@@ -1044,7 +1044,7 @@ void FieldWidget3D::initBalls(vtkRenderer* renderer)
     vtkSmartPointer<vtkSphereSource> sphereSrc = vtkSmartPointer<vtkSphereSource>::New();
     sphereSrc->SetRadius(0.11);
     vtkSmartPointer<vtkPolyDataMapper> sphereMapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-    sphereMapper->SetInput(sphereSrc->GetOutput());
+	sphereMapper->SetInputConnection(sphereSrc->GetOutputPort());
     for(int i = 0; i < NROBOTS; i++)
     {
         balls[i] = vtkActor::New();
@@ -1061,7 +1061,7 @@ vtkActor* FieldWidget3D::createText(QString text){
     vtkSmartPointer<vtkVectorText> txt = vtkSmartPointer<vtkVectorText>::New();
     txt->SetText(text.toStdString().c_str());
     vtkSmartPointer<vtkPolyDataMapper> txtRobotMapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-    txtRobotMapper->SetInput(txt->GetOutput());
+	txtRobotMapper->SetInputConnection(txt->GetOutputPort());
     actor->SetMapper(txtRobotMapper);
     actor->GetProperty()->SetColor(0.0,0.0,0.0);
     actor->GetProperty()->SetAmbient(1.0);
@@ -1076,7 +1076,7 @@ vtkActor* FieldWidget3D::createObstacle(){
     cylinder->SetHeight(OBSTACLE_HEIGHT);
     cylinder->SetResolution(12);
     vtkSmartPointer<vtkPolyDataMapper> cylinderMapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-    cylinderMapper->SetInput(cylinder->GetOutput());
+	cylinderMapper->SetInputConnection(cylinder->GetOutputPort());
 
     vtkActor* obstacleActor = vtkActor::New();
     obstacleActor->SetMapper(cylinderMapper);
@@ -1124,7 +1124,7 @@ vtkActor* FieldWidget3D::createDebugPt(){
 
       // Create a mapper and actor
       vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-      mapper->SetInput(polygonPolyData);
+	  mapper->SetInputData(polygonPolyData);
 
       vtkActor* actor = vtkActor::New();
       actor->SetMapper(mapper);
@@ -1205,7 +1205,7 @@ void FieldWidget3D::updateGridView()
     }
 
     heightPolyData->SetPoints(heightPoints);
-    heightDelaunay->SetInput(heightPolyData);
+	heightDelaunay->SetInputData(heightPolyData);
     heightDelaunay->Update();
     heightPolyDataAfterInterp  = heightDelaunay->GetOutput();
 
@@ -1267,7 +1267,7 @@ void FieldWidget3D::initGridView(){
     }
 
     heightPolyData->SetPoints(heightPoints); // Add the grid points to a polydata object
-    heightDelaunay->SetInput(heightPolyData);
+	heightDelaunay->SetInputData(heightPolyData);
 
     // Triangulate the grid points
     heightDelaunay->Update();
@@ -1275,7 +1275,7 @@ void FieldWidget3D::initGridView(){
 
     // Create a mapper and actor
     vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-    mapper->SetInputConnection(heightPolyDataAfterInterp->GetProducerPort());
+	mapper->SetInputData(heightPolyDataAfterInterp);
     heightActor = vtkActor::New();
     heightActor->SetMapper(mapper);
     heightActor->SetVisibility(0);

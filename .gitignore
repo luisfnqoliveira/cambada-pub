@@ -1,0 +1,7 @@
+# cmake build directory #
+build
+
+# generated dirs #
+lib
+bin
+

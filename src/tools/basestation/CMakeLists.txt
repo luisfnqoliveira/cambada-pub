@@ -94,5 +94,5 @@ TARGET_LINK_LIBRARIES( basestation
  glut
  GL
  z
-	QVTK
+ ${VTK_LIBRARIES}
 )
