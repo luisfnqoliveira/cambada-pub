@@ -326,9 +326,16 @@ void SensorVision::DetectBall(){
   //this->frontVisionInfo.ball.cyclesNotVisible = 10000;
   
   // Parent pose
-  Pose3d ppose = this->body->GetAbsPose();
+  Pose3d ppose = this->body->GetAbsPose();//absolute position robot
+  this->visionInfo.sim_agent_position[0] = ppose.pos.x;
+  this->visionInfo.sim_agent_position[1] = ppose.pos.y;
+  this->visionInfo.sim_agent_position[2] = ppose.rot.GetYaw();
+
   // Ball pose
   Pose3d bpose = this->ball->GetAbsPose();
+  this->visionInfo.sim_ball_position[0] = bpose.pos.x;
+  this->visionInfo.sim_ball_position[1] = bpose.pos.y;
+
   // Save ball distance from the ground 
   float ballAltitude = std::max(bpose.pos.z - this->ballRadius, 0.0);
   
@@ -376,6 +383,8 @@ void SensorVision::DetectBall(){
   this->visionInfo.ball[0].position.y = ballRelPosition.pos.y;
   this->visionInfo.nBalls = 1;
 
+  //run xrtbd from /bin
+  
 /*  std::cout << "BALL " << Simulator::Instance()->GetSimTime().Double()
             << " "     << (ballRelPosition + ppose).pos
             << std::endl;

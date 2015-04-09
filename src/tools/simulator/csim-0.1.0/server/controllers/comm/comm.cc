@@ -133,7 +133,7 @@ void Comm::UpdateChild()
   // Fetch coach data
   DB_get_from(0 + offset, 0, COACH_INFO, (void*)&cInfo);
   FINFO_Lifetime = DB_get_from(0 + offset, 0, FORMATION_INFO, (void*)&fInfo);
-  DB_get_from(0 + offset, 0, KICKCALIB_APP, (void*)&kcAppData);
+  //DB_get_from(0 + offset, 0, KICKCALIB_APP, (void*)&kcAppData);
 
 //  fprintf(stderr,"csim_comm finfo size %d fid %d msg %s\n", sizeof(fInfo), fInfo.formationID, fInfo.setplayMessage);
 
@@ -142,15 +142,15 @@ void Comm::UpdateChild()
     if(FINFO_Lifetime < 1000){    
 	DB_put_in(ag1 + offset, 0, FORMATION_INFO, (void*)&fInfo,0);
     }
-    DB_put_in(ag1 + offset, 0, KICKCALIB_APP, (void*)&kcAppData,0);
+    //DB_put_in(ag1 + offset, 0, KICKCALIB_APP, (void*)&kcAppData,0);
 
     int lt = DB_get_from(ag1 + offset, ag1, ROBOT_WS, (void*)&rws);
-    int lt2 = DB_get_from(ag1 + offset, ag1, KICKCALIB_ROB, (void*)&kcRobData);
+    //int lt2 = DB_get_from(ag1 + offset, ag1, KICKCALIB_ROB, (void*)&kcRobData);
     //int lt3 = DB_get_from(ag1 + offset, ag1, GRIDVIEW, (void*)&gv);
     for(int ag2=0; ag2 < N_AGENTS; ag2++) {
       if(ag1!=ag2) {
         DB_put_in(ag2 + offset, ag1, ROBOT_WS, (void*)&rws, lt );
-        DB_put_in(ag2 + offset, ag1, KICKCALIB_ROB, (void*)&kcRobData, lt2 );
+        //DB_put_in(ag2 + offset, ag1, KICKCALIB_ROB, (void*)&kcRobData, lt2 );
         //DB_put_in(ag2 + offset, ag1, GRIDVIEW, (void*)&gv, lt3 );
       }
     } // end for( ag2 )

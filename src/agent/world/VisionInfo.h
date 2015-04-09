@@ -65,7 +65,8 @@ class VisionInfo
 {
 public:
 	VisionInfo();
-	
+	float           sim_agent_position[3];
+	float           sim_ball_position[2];
 	RadialSensor	obstacles;
 	RadialSensor	lines;
 	BallSensor		ball[MAX_BALLS];
